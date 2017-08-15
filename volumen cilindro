@@ -1,0 +1,61 @@
+// lab2.cpp : Defines the entry point for the console application.
+//volumen de un cilindro.
+//jose luis rojas quintanilla (15 agosto 2017).
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include "stdlib.h"
+
+using namespace std;
+
+float leer_radio();
+float leer_altura();
+float volumen_cilindro(float radio, float altura);
+
+void main()
+{ float radio, altura,volumen;
+
+  radio=leer_radio();
+  altura=leer_altura();
+  volumen=volumen_cilindro(radio, altura);
+
+  cout<<"el volumen del cilindro es: ";
+  cout<<volumen<<endl;
+
+  getch();
+}
+
+float leer_radio()
+{ float radio;
+
+  cout<<"ingrese el radio del cilindro: ";
+  cin>>radio;
+  cout<<endl;
+
+  return(radio);
+}
+
+float leer_altura()
+{ float altura;
+
+  cout<<"ingrese la altura del cilindro: ";
+  cin>>altura;
+  cout<<endl;
+
+  return(altura);
+}
+
+float volumen_cilindro(float radio, float altura)
+{ float volumen, pi;
+
+  pi=3.141516;
+
+  volumen=pi*(radio*radio)*altura;
+
+  return(volumen);
+
+}
+
+　
+　
