@@ -1,0 +1,137 @@
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( combinatoria de factoriales. )
+// ( jose luis rojas quintanilla 21/08/2017. )
+
+#include "stdafx.h" // librerias.
+#include <iostream>
+#include "conio.h"
+
+using namespace std;
+
+float leerN (); // prototipos.
+float leerR ();
+
+float solucionFacN ( float N );
+float solucionFacR ( float R );
+float solucionRes ( float N, float R );
+float solucionFacRes ( float Res );
+float solucionCombinatoria ( float FacN, float FacR, float FacRes );
+
+void main()
+{ float N, R, FacN, FacR, Res, FacRes, Combi, i; // variables.
+
+  N = leerN (); // llamar funcion.
+  R = leerR ();
+
+  FacN = solucionFacN ( N );
+  FacR = solucionFacR ( R );
+  Res = solucionRes ( N, R );
+  FacRes = solucionFacRes ( Res );
+  Combi = solucionCombinatoria ( FacN, FacR, FacRes );
+
+  cout<< " el valor del factorial FacN es: "; // salida.
+  cout<< FacN;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor del factorial FacR es: ";
+  cout<< FacR;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor de la resta ( N-R ) es: ";
+  cout<< Res;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor del Factial FacRes ( N-R ) es: ";
+  cout<< FacRes;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor de la combinatoria ( Combi ) es: ";
+  cout<< Combi;
+  cout<< endl;
+  cout<< endl;
+
+  getch();
+}
+
+float leerN () // declarar funcion.
+{ float N;
+
+  do
+   { cout<< " ingrese el valor de N (>=0): ";
+     cin>> N;
+     cout<< endl;
+   } while ( N < 0);
+
+   return (N);
+}
+
+float leerR ()
+{ float R;
+
+  do
+   { cout<< " ingrese el valor de R (>=0): ";
+     cin>> R;
+     cout<< endl;
+	 cout<< endl;
+	 cout<< endl;
+   } while ( R < 0);
+
+   return (R);
+} 
+
+float solucionFacN ( float N )
+{ float FacN;
+    
+  FacN = 1;
+ 
+  for( int i=1; i<=N; i=i+1)
+    { FacN = FacN * i;
+    }
+  return (FacN);
+} 
+
+float solucionFacR ( float R )
+{ float FacR;
+    
+  FacR = 1;
+ 
+  for( int i=1; i<=R; i=i+1)
+    { FacR = FacR * i;
+    }
+  return (FacR);
+} 
+
+float solucionRes ( float N, float R )
+{ float Res;
+ 
+  Res = N - R;
+
+  return (Res);
+}
+
+
+float solucionFacRes ( float Res )
+{ float FacRes;
+    
+  FacRes = 1;
+ 
+  for( int i=1; i<=Res; i=i+1)
+    { FacRes = FacRes * i;
+    }
+  return (FacRes);
+} 
+
+float solucionCombinatoria ( float FacN, float FacR, float FacRes )
+{ float Combi;
+
+  Combi = ( FacN ) / ( ( FacR ) * ( FacRes ) );
+
+  return ( Combi );
+
+}
+
+
