@@ -1,0 +1,124 @@
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( sistema de dos ecuaciones con dos incognitas. )
+// ( jose luis rojas quintanilla 21/08/2017. )
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+
+using namespace std;
+
+float leerA ();
+float leerB ();
+float leerC ();
+float leerD ();
+float leerE ();
+float leerF ();
+
+float SolucionY ( float A, float B,float C,float D,float E,float F );
+float SolucionX ( float A, float B,float C,float Y );
+
+void main()
+{ float A,B,C,D,E,F,X,Y;
+
+A = leerA ();
+B = leerB ();
+C = leerC ();
+D = leerD ();
+E = leerE ();
+F = leerF ();
+
+Y = SolucionY ( A, B, C, D, E, F );
+X = SolucionX ( A, B, C, Y );
+
+cout<< " el valor de Y es: ";
+cout<< Y;
+cout<< endl;
+cout<< endl;
+cout<< " el valor de X es: ";
+cout<< X;
+cout<< endl;
+
+getch();
+
+}
+
+float leerA ()
+{ float A;
+
+  do
+   { cout<< " ingrese el valor de A (!=0): ";
+     cin>> A;
+     cout<< endl;
+   } while ( A == 0);
+
+   return (A);
+}
+
+float leerB ()
+{ float B;
+
+  cout<< " ingrese el valor de B: ";
+  cin>> B;
+  cout<< endl;
+
+  return (B);
+}
+
+float leerC ()
+{ float C;
+
+  cout<< " ingrese el valor de C: ";
+  cin>> C;
+  cout<< endl;
+
+  return (C);
+}
+
+float leerD ()
+{ float D;
+
+  cout<< " ingrese el valor de D: ";
+  cin>> D;
+  cout<< endl;
+
+  return (D);
+}
+
+float leerE ()
+{ float E;
+
+  cout<< " ingrese el valor de E: ";
+  cin>> E;
+  cout<< endl;
+
+  return (E);
+}
+
+float leerF ()
+{ float F;
+
+  cout<< " ingrese el valor de F: ";
+  cin>> F;
+  cout<< endl;
+
+  return (F);
+}
+
+float SolucionY ( float A, float B, float C, float D, float E, float F )
+{ float Y;
+
+  Y = (C*D - A*F) / (A*E - B*D );
+
+  return (Y);
+}
+
+float SolucionX ( float A, float B, float C, float Y )
+{ float X;
+
+  X = (-B*Y - C) / A;
+
+  return (X);
+}
+
+
