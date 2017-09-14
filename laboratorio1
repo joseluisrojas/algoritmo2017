@@ -1,0 +1,452 @@
+1.-
+
+// MENU.cpp : Defines the entry point for the console application.
+//( menu de opciones.)
+//jose luis rojas quintanilla (15/08/2017).
+
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include "stdlib.h"
+#include "math.h"
+
+
+using namespace std;
+
+float POTEN(float base, int exp);
+int FACT(int X);
+
+void main()
+{	int opcion;
+	do{
+		 cout<<"*****MENU*****"<<endl;
+		 cout<<"1. Sacar la potencia de un numero"<<endl;
+		 cout<<"2. Sacar el factorial de un numero"<<endl;
+		 cout<<"3. Serie: "<<endl;
+		 cout<<"0. Salir"<<endl;
+		 cout<<"Elija la opcion que prefiera"<<endl;
+		 cin>>opcion;
+		 switch(opcion)
+			{
+			      case 1: 
+                                 {
+				       int Y;
+				       float X,POTENCIA;
+				       cout<< "INGRESE UN VALOR REAL PARA LA BASE:"<<endl;
+				       cin>> X;
+				       cout<< "INGRESE UN VALOR PARA EL EXPONENTE:"<<endl;
+				       cin>> Y;
+				       POTENCIA = POTEN(X,Y);
+				       cout<< "LA POTENCIA ES IGUAL A:"<<POTENCIA<<endl;
+
+					getch();
+
+			             break;
+				     }	
+
+			     case 2:
+                                { 
+				      int Factorial,Num;
+				      cout<< "INGRESE UN NUMERO PARA HALLAR SU FACTORIAL:"<<endl;
+				      cin>> Num;
+					
+				      Factorial = FACT(Num);
+
+				     cout<< "EL FACTORIAL DE "<<Num<<" ES IGUAL A: "<<Factorial<<endl;
+					
+				     getch();
+
+				     break;
+			           }
+					
+			    case 3:
+				    {
+				     float x,N;
+				     cout<< "INGRESE UN VALOR PARA X"<<endl;
+				     cin>> x;
+				     cout<< "INGRESE UN VALOR PARA N"<<endl;
+				     cin>> N;
+
+				     float S=0; //ACUMULADOR
+
+				     for(int i=1;i<=N;i++)
+					{ S = S + (POTEN(x,i)/FACT(i)) ;
+					}
+
+				     cout<<"LA SUMATORIA ES IGUAL A: "<< S <<endl; 
+
+				     getch();
+
+				     break;
+
+			           }
+
+		           case 0:
+				     cout<<"Salir";
+
+				     break;
+					
+		          default:
+				     cout<<"ERROR";
+
+				     break;
+			}
+			
+			system ("cls");
+	} while( opcion != 0);
+
+	getch();
+
+}
+
+float POTEN(float base, int exp)
+{ float Pot;
+
+  Pot = 1.0;
+
+  for (int i = 0; i<=(exp-1); i++)
+    { Pot = Pot * base;
+    }
+
+  return (Pot);
+}
+
+int FACT(int X)
+{ int F = 1;//ACUMULADOR
+
+  for(int I = 1; I <= X; I++)//INCREMENTADOR 
+	{ F = F * I;
+	}	
+			
+  return (F);
+}
+
+
+2.-
+
+// lab2.cpp : Defines the entry point for the console application.
+//( volumen de un cilindro.)
+//volumen de un cilindro.
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include "stdlib.h"
+
+using namespace std;
+
+float leer_radio();
+float leer_altura();
+float volumen_cilindro(float radio, float altura);
+
+void main()
+{ float radio, altura,volumen;
+
+  radio=leer_radio();
+  altura=leer_altura();
+  volumen=volumen_cilindro(radio, altura);
+
+  cout<<"el volumen del cilindro es: ";
+  cout<<volumen<<endl;
+
+  getch();
+}
+
+float leer_radio()
+{ float radio;
+
+  cout<<"ingrese el radio del cilindro: ";
+  cin>>radio;
+  cout<<endl;
+
+  return(radio);
+}
+
+float leer_altura()
+{ float altura;
+
+  cout<<"ingrese la altura del cilindro: ";
+  cin>>altura;
+  cout<<endl;
+
+  return(altura);
+}
+
+float volumen_cilindro(float radio, float altura)
+{ float volumen, pi;
+
+  pi=3.141516;
+
+  volumen=pi*(radio*radio)*altura;
+
+  return(volumen);
+
+}
+
+3.-
+
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( combinatoria de factoriales por valor. )
+// ( jose luis rojas quintanilla 21/08/2017. )
+
+#include "stdafx.h" // librerias.
+#include <iostream>
+#include "conio.h"
+
+using namespace std;
+
+float leerN (); // prototipos.
+float leerR ();
+
+float solucionFacN ( float N );
+float solucionFacR ( float R );
+float solucionRes ( float N, float R );
+float solucionFacRes ( float Res );
+float solucionCombinatoria ( float FacN, float FacR, float FacRes );
+
+void main()
+{ float N, R, FacN, FacR, Res, FacRes, Combi, i; // variables.
+
+  N = leerN (); // llamar funcion.
+  R = leerR ();
+
+  FacN = solucionFacN ( N );
+  FacR = solucionFacR ( R );
+  Res = solucionRes ( N, R );
+  FacRes = solucionFacRes ( Res );
+  Combi = solucionCombinatoria ( FacN, FacR, FacRes );
+
+  cout<< " el valor del factorial FacN es: "; // salida.
+  cout<< FacN;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor del factorial FacR es: ";
+  cout<< FacR;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor de la resta ( N-R ) es: ";
+  cout<< Res;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor del Factial FacRes ( N-R ) es: ";
+  cout<< FacRes;
+  cout<< endl;
+  cout<< endl;
+
+  cout<< " el valor de la combinatoria ( Combi ) es: ";
+  cout<< Combi;
+  cout<< endl;
+  cout<< endl;
+
+  getch();
+}
+
+float leerN () // declarar funcion.
+{ float N;
+
+  do
+   { cout<< " ingrese el valor de N (>=0): ";
+     cin>> N;
+     cout<< endl;
+   } while ( N < 0);
+
+   return (N);
+}
+
+float leerR ()
+{ float R;
+
+  do
+   { cout<< " ingrese el valor de R (>=0): ";
+     cin>> R;
+     cout<< endl;
+	 cout<< endl;
+	 cout<< endl;
+   } while ( R < 0);
+
+   return (R);
+} 
+
+float solucionFacN ( float N )
+{ float FacN;
+    
+  FacN = 1;
+ 
+  for( int i=1; i<=N; i=i+1)
+    { FacN = FacN * i;
+    }
+  return (FacN);
+} 
+
+float solucionFacR ( float R )
+{ float FacR;
+    
+  FacR = 1;
+ 
+  for( int i=1; i<=R; i=i+1)
+    { FacR = FacR * i;
+    }
+  return (FacR);
+} 
+
+float solucionRes ( float N, float R )
+{ float Res;
+ 
+  Res = N - R;
+
+  return (Res);
+}
+
+
+float solucionFacRes ( float Res )
+{ float FacRes;
+    
+  FacRes = 1;
+ 
+  for( int i=1; i<=Res; i=i+1)
+    { FacRes = FacRes * i;
+    }
+  return (FacRes);
+} 
+
+float solucionCombinatoria ( float FacN, float FacR, float FacRes )
+{ float Combi;
+
+  Combi = ( FacN ) / ( ( FacR ) * ( FacRes ) );
+
+  return ( Combi );
+
+}
+
+4.-
+
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( sistema de dos ecuaciones con dos incognitas. )
+// ( jose luis rojas quintanilla 21/08/2017. )
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+
+using namespace std;
+
+float leerA ();
+float leerB ();
+float leerC ();
+float leerD ();
+float leerE ();
+float leerF ();
+
+float SolucionY ( float A, float B,float C,float D,float E,float F );
+float SolucionX ( float A, float B,float C,float Y );
+
+void main()
+{ float A,B,C,D,E,F,X,Y;
+
+  A = leerA ();
+  B = leerB ();
+  C = leerC ();
+  D = leerD ();
+  E = leerE ();
+  F = leerF ();
+
+  Y = SolucionY ( A, B, C, D, E, F );
+  X = SolucionX ( A, B, C, Y );
+
+  cout<< " el valor de Y es: ";
+  cout<< Y;
+  cout<< endl;
+  cout<< endl;
+  cout<< " el valor de X es: ";
+  cout<< X;
+  cout<< endl;
+
+  getch();
+
+}
+
+float leerA ()
+{ float A;
+
+  do
+   { cout<< " ingrese el valor de A (!=0): ";
+     cin>> A;
+     cout<< endl;
+   } while ( A == 0);
+
+   return (A);
+}
+
+
+float leerB ()
+{ float B;
+
+  cout<< " ingrese el valor de B: ";
+  cin>> B;
+  cout<< endl;
+
+  return (B);
+}
+
+float leerC ()
+{ float C;
+
+  cout<< " ingrese el valor de C: ";
+  cin>> C;
+  cout<< endl;
+
+  return (C);
+}
+
+float leerD ()
+{ float D;
+
+  cout<< " ingrese el valor de D: ";
+  cin>> D;
+  cout<< endl;
+
+  return (D);
+}
+
+float leerE ()
+{ float E;
+
+  cout<< " ingrese el valor de E: ";
+  cin>> E;
+  cout<< endl;
+
+  return (E);
+}
+
+float leerF ()
+{ float F;
+
+  cout<< " ingrese el valor de F: ";
+  cin>> F;
+  cout<< endl;
+
+  return (F);
+}
+
+float SolucionY ( float A, float B, float C, float D, float E, float F )
+{ float Y;
+
+  Y = (C*D - A*F) / (A*E - B*D );
+
+  return (Y);
+}
+
+float SolucionX ( float A, float B, float C, float Y )
+{ float X;
+
+  X = (-B*Y - C) / A;
+
+  return (X);
+}
+
+
+
