@@ -1,0 +1,207 @@
+1.-
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( numeros multiplos de tres, ordenados ascendentemente, promedio. )
+// ( jose luis rojas quintanilla 05/09/2017. )
+                                                                                       
+#include "stdafx.h" // librerias.
+#include <iostream>
+#include "conio.h"
+
+#define TAM 100 // tamaño del vector.
+
+using namespace std;
+
+void CargarVectorA (int vecA[], int N); // prototipos.
+void CargarVectorB (int vecA[], int vecB[], int N);
+
+void OrdenarVectorBurbuja (int vecB[], int N);
+
+void Mayor (int vecB[], int N, int *MAY);
+void Menor (int vecB[], int N, int *MEN);
+
+void Promedio (int vecB[], int N, int *MEN, int *MAY, float *PROM);
+
+void MostrarVectorOrdenadoBurbuja (int vecB[], int N);
+
+void main()
+{ int vecA[TAM]={'\0'}, vecB[TAM]={'\0'}, N, MAY, MEN; // variables.
+  float PROM;
+  
+  do // limite de elementos para calcular.
+   { 
+     cout<< "ingrese la cantidad de elementos a calcular: ";
+     cin>> N;
+     cout<< endl;
+
+   } while ((N < 0) || (N >= TAM));
+
+   CargarVectorA (vecA, N); // llamada de funcion.
+   CargarVectorB (vecA, vecB, N);
+
+   OrdenarVectorBurbuja (vecB, N);
+
+   Mayor ( vecB, N, &MAY);
+   Menor ( vecB,  N, &MEN);
+
+   Promedio ( vecB, N, &MEN, &MAY, &PROM);
+
+   MostrarVectorOrdenadoBurbuja (vecB, N);
+
+   
+   cout<< "el mayor es: ";
+   cout<< MAY;
+   cout<< endl;
+    cout<< "el menor es: ";
+   cout<< MEN;
+   cout<< endl;
+   cout<< "el promedio es: ";
+   cout<< PROM;
+   cout<< endl;
+
+   getch();
+}
+
+void CargarVectorA (int vecA[], int N) // declarar funcion.
+{  
+  for (int i=0; i<N; i=i+1) 
+    { 
+      cout<< "valores del vector vecA["<< i <<"]= ";
+      cin>> vecA[i];
+      cout<< endl;
+    }
+}
+
+void CargarVectorB (int vecA[], int vecB[], int N)
+{  
+  for (int i=0; i<N; i=i+1) 
+    { if (vecA[i] % 3 == 0)
+       {
+         vecB[i] = vecA[i];
+       }
+    }
+}
+
+void OrdenarVectorBurbuja (int vecB[], int N)
+{ int AUX;
+
+  for (int i=0; i<(N-1); i=i+1) 
+    {
+      for (int j=(i+1); j<N; j=j+1)
+	 {
+          if ( vecB[i] > vecB[j])
+	    { 
+             AUX = vecB[i];
+
+             vecB[i] = vecB[j];
+
+             vecB[j] = AUX;
+     	    }           
+        }
+    } 
+}
+
+void Mayor (int vecB[], int N, int *MAY)
+{ *MAY=vecB[0];
+
+	for (int i=0; i<N; i=i+1)
+         { if (vecB[i]>*MAY)
+            {
+	       *MAY=vecB[i];
+            }
+         }
+}
+void Menor (int vecB[], int N, int *MEN)
+{  int i;
+
+   *MEN=vecB[0];
+   
+   for (int i=0; i<N; i=i+1)		
+     { if (vecB[i]<*MEN)
+        {
+	    *MEN=vecB[i];
+        }
+     }    
+}
+
+void Promedio (int vecB[], int N,int *MEN, int *MAY, float *PROM)
+{ float S, P;
+
+  S = 0;
+
+  for (int i=0; i<N; i=i+1)
+    { if (vecB[i] !=0)
+       {
+         S = S + vecB[i];
+
+         P = S - (*MEN + *MAY);
+
+         *PROM = P / (N-2);   
+       }
+    }
+}
+
+void MostrarVectorOrdenadoBurbuja (int vecB[], int N)
+{
+  for (int i=0; i<N; i=i+1)
+  {
+	cout<< "el vector cargado es vecB["<< i <<"]= ";
+	cout<< vecB[i];
+	cout<< endl;
+  }
+}
+
+
+2.-
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( numero de consonantes. )
+// ( jose luis rojas quintanilla 05/09/2017. )
+                                                                                
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+
+using namespace std;
+
+int ContarConsonante (string cadena);
+
+void main()
+{ double num;
+  string cadena;
+ 
+
+cout<<"ingrese la frase: ";
+cin.ignore();
+getline(cin,cadena);
+
+num = ContarConsonante (cadena);
+
+cout<< "el numero de consonantes es: ";
+cout<<num;
+cout<< endl;
+
+getch();
+
+}
+
+
+
+int ContarConsonante (string cadena)
+{ double n=cadena.length();
+  double num;
+
+  num = 0;
+
+  for (int i=0;i<n; i=i+1)
+
+    { if (cadena[i]=='B' || cadena[i]=='b' || cadena[i]=='C' || cadena[i]=='c' || cadena[i]=='D' || cadena[i]=='d' || cadena[i]=='F' ||cadena[i]=='f' || cadena[i]=='G' || cadena[i]=='g' || cadena[i]=='H' || cadena[i]=='h' || cadena[i]=='J' || cadena[i]=='j' || cadena[i]=='K' || cadena[i]=='k' || cadena[i]=='L' || cadena[i]=='l' || cadena[i]=='M' || cadena[i]=='m' || cadena[i]=='N' || cadena[i]=='n' || cadena[i]=='Ñ' || cadena[i]=='ñ' || cadena[i]=='P' || cadena[i]=='p' || cadena[i]=='Q' || cadena[i]=='q' || cadena[i]=='R' || cadena[i]=='r' || cadena[i]=='S' || cadena[i]=='s' || cadena[i]=='T' || cadena[i]=='t' || cadena[i]=='V' || cadena[i]=='v' || cadena[i]=='W' || cadena[i]=='w' || cadena[i]=='X' || cadena[i]=='x' || cadena[i]=='Y' || cadena[i]=='y' || cadena[i]=='Z' || cadena[i]=='z')
+
+        num = num + 1;
+
+    }
+
+  return (num); 
+
+}
+
+
