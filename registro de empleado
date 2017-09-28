@@ -1,0 +1,88 @@
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( registro de empleados. )
+// ( jose luis rojas quintanilla 28/09/2017. )
+                                                                                
+#include "stdafx.h" // librerias.
+#include <iostream>
+#include "string"
+#include "conio.h"
+
+#define MAX 100 // define valor maximo a calcular.
+
+using namespace std;
+
+struct tEmpleado // estructura para registro.
+{ int nroEmpleado;
+  string Nombre;
+  string ApellidoPaterno;
+  string ApellidoMaterno;
+  string Direccion;
+  int Telefono;
+  int Celular;
+  float SalarioBruto;
+};
+
+void main()
+{ int  N; // variables.
+  tEmpleado vec[MAX];
+
+  do
+   { cout<< "ingrese la cantidad de empleados a registrar: ";
+     cin>> N;
+     cout<< endl;
+   } while ((N < 0) || (N >= MAX));
+
+  cin.ignore();
+
+  for (int i=0; i<N; i=i+1) // registro de datos.
+   { 
+     cout<< "ingrese numero asignado al empleado: ";
+     cin>> vec[i].nroEmpleado;
+     cout<< endl;
+     cin.ignore();
+     
+     cout<< "ingrese los nombres del empleado: ";
+     getline(cin,vec[i].Nombre);
+     cout<< endl;
+
+     cout<< "ingrese el apellido paterno del empleado: ";
+     getline(cin,vec[i].ApellidoPaterno);
+     cout<< endl;
+
+     cout<< "ingrese el apellido materno del empleado: ";
+     getline(cin,vec[i].ApellidoMaterno);
+     cout<< endl;
+
+     cout<< "ingrese la direccion del empleado: ";
+     getline(cin,vec[i].Direccion);
+     cout<< endl;
+
+     cout<< "ingrese el numero de telefono del empleado: ";
+     cin>> vec[i].Telefono;
+     cout<< endl;
+
+     cout<< "ingrese el celular del empleado: ";
+     cin>> vec[i].Celular;
+     cout<< endl;
+
+     cout<< "ingrese el salario bruto del empleado: ";
+     cin>> vec[i].SalarioBruto;
+     cout<< endl; 
+
+   }
+
+  for (int i=0; i<N; i=i+1) // salida de datos.
+    { 
+      cout<< " indice -------- nombres -------- apellido paterno -------- apellido materno " << endl<< endl;
+
+      cout<< i+1 <<"   " << vec[i].nroEmpleado << "            " << vec[i].Nombre <<"           "<< vec[i].ApellidoPaterno <<"                   "<< vec[i].ApellidoMaterno << endl<< endl<< endl;
+
+      cout<< " direccion ---------- telefono ---------- celular ---------- sueldo bruto "<< endl<< endl;
+ 
+      cout<<" "<< vec[i].Direccion <<"              "<< vec[i].Telefono <<"             "<< vec[i].Celular <<"           "<< vec[i].SalarioBruto << endl<< endl<< endl;
+   }
+
+  getch();
+
+}
+
