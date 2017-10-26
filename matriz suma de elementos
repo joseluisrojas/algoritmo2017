@@ -1,0 +1,92 @@
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( suma matriz (n x m) tal cual fue ingresado. )
+// ( jose luis rojas quintanilla 26/10/2017. )
+                                                                                
+#include "stdafx.h" // librerias.
+#include <iostream>
+#include "conio.h"
+
+#define fil 20 // definir tamaño del vector.
+#define col 20
+
+using namespace std;
+
+void CargarMatriz (int Mat[fil][col], int n, int m); // prototipos.
+void MostrarMatriz (int Mat[fil][col], int n, int m);
+void MostrarSumaMatriz (int Mat[fil][col], int n, int m);
+
+void main()
+{ 
+  int Mat[fil][col]={'\0'}, n, m; // variables.
+
+  do // limite de elementos fila para calcular.
+   { 
+     cout<< "cantidad fila a calcular: ";
+     cin>> n;
+     cout<< endl;
+
+   } while ((n < 0) || (n >= fil));
+
+  do // limite de elementos columna para calcular.
+   { 
+     cout<< "cantidad columna a calcular: ";
+     cin>> m;
+     cout<< endl;
+
+   } while ((m < 0) || (m >= col));
+
+  CargarMatriz ( Mat, n, m); // llamar funciones.
+  MostrarMatriz (Mat, n, m);
+  MostrarSumaMatriz (Mat, n, m);
+
+  getch();
+
+}
+
+void CargarMatriz (int Mat[fil][col], int n, int m) // declarar funciones.
+{ 
+  cout<< "digite valores matriz Mat: ";
+  cout<< endl<< endl;
+                        
+  for (int i=0; i<n; i=i+1)
+    { for (int j=0; j<m; j=j+1)
+      { 
+          cout<< "Mat["<< i <<"]["<< j <<"]= ";
+          cin>> Mat[i][j];
+          cout<< endl;
+      }
+    }
+}
+
+void MostrarMatriz (int Mat[fil][col], int n, int m)
+{ 
+  cout<< "\n\t  mostrando matriz tal cual fue ingresado: ";
+  cout<< endl<< endl;
+
+  for (int i=0; i<n; i=i+1)
+    { for (int j=0; j<m; j=j+1)
+        { 
+           cout<< "\tMat["<< i <<"][" << j <<"]= ";
+           cout<< Mat[i][j];
+         
+        }
+
+        cout<< "\n\n";
+    }
+}
+
+void MostrarSumaMatriz (int Mat[fil][col], int n, int m)
+{
+   int suma = 0;
+
+   for (int i=0; i<n; i=i+1)
+   { for (int j=0; j<m; j=j+1)
+     {
+        suma = suma + Mat[i][j];
+     }
+   }
+
+   cout<< "la suma de los elementos de la matriz cuadrada (n x n) es:  ";
+   cout<< suma;
+
+}
