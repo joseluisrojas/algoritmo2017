@@ -1,0 +1,132 @@
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( suma 2 matrices cuadrada (n x n). )
+// ( jose luis rojas quintanilla 26/10/2017. )
+                                                                                
+#include "stdafx.h" // librerias.
+#include <iostream>
+#include "conio.h"
+
+#define fil_col 100 // define tamaño del vector.
+
+using namespace std;
+
+void CargarMatrizCuadradaA (int MatA[fil_col][fil_col], int n); // prototipos.
+void CargarMatrizCuadradaB (int MatB[fil_col][fil_col], int n); // prototipos.
+void MostrarMatrizCuadradaA (int MatA[fil_col][fil_col], int n);
+void MostrarMatrizCuadradaB (int MatB[fil_col][fil_col], int n);
+void SumaDosMatriccesAB (int MatA[fil_col][fil_col], int MatB[fil_col][fil_col], int MatAB[fil_col][fil_col], int n);
+void MostrarMatrizCuadradaAB (int MatAB[fil_col][fil_col], int n);
+
+void main ()
+{
+  int MatA[fil_col][fil_col]={'\0'}, n, MatB[fil_col][fil_col]={'\0'}, MatAB[fil_col][fil_col]={'\0'}; // declarar variables.
+
+  do
+  {
+     cout<< "ingrese cantidad de filas y columnas de la matriz cuadrada: ";
+     cin>> n;
+     cout<< endl;
+
+  } while ((n < 0) || (n >= fil_col));
+
+  CargarMatrizCuadradaA (MatA, n); // llamar funcion cargar.
+  CargarMatrizCuadradaB (MatB, n); 
+  MostrarMatrizCuadradaA (MatA, n);
+  MostrarMatrizCuadradaB (MatB, n);
+  SumaDosMatriccesAB (MatA, MatB, MatAB, n);
+  MostrarMatrizCuadradaAB (MatAB, n); 
+ 
+  getch();
+
+}
+
+void CargarMatrizCuadradaA (int MatA[fil_col][fil_col], int n) // funcion cargar.
+{
+   cout<< "ingrese los elementos de la matriz A: ";
+   cout<< endl<< endl;
+
+   for (int i=0; i<n; i++)
+   { for (int j=0; j<n; j++)
+     {
+        cout<< "Mat A["<<i<<"]["<<j<<"]= ";
+        cin>> MatA[i][j];
+        cout<< endl;
+     }
+   }
+}
+
+void CargarMatrizCuadradaB (int MatB[fil_col][fil_col], int n) // funcion cargar.
+{
+   cout<< "ingrese los elementos de la matriz B: ";
+   cout<< endl<< endl;
+
+   for (int i=0; i<n; i++)
+   { for (int j=0; j<n; j++)
+     {
+        cout<< "Mat B["<<i<<"]["<<j<<"]= ";
+        cin>> MatB[i][j];
+        cout<< endl;
+     }
+   }
+}
+
+void MostrarMatrizCuadradaA (int MatA[fil_col][fil_col], int n) // funcion mostrar.
+{
+   cout<< "\n\n\tla matriz cuadrada A (n x n) es: ";
+   cout<< endl<< endl;
+
+   for (int i=0; i<n; i++)
+   { for (int j=0; j<n; j++)
+     {
+        cout<< "\t Mat A["<<i<<"]["<<j<<"]= ";
+        cout<< MatA[i][j];
+     }
+
+     cout<< endl<< endl;
+
+   }
+}
+
+void MostrarMatrizCuadradaB (int MatB[fil_col][fil_col], int n) // funcion mostrar.
+{
+   cout<< "\n\n\tla matriz cuadrada B (n x n) es: ";
+   cout<< endl<< endl;
+
+   for (int i=0; i<n; i++)
+   { for (int j=0; j<n; j++)
+     {
+        cout<< "\t Mat B["<<i<<"]["<<j<<"]= ";
+        cout<< MatB[i][j];
+     }
+
+     cout<< endl<< endl;
+
+   }
+}
+
+void SumaDosMatriccesAB (int MatA[fil_col][fil_col], int MatB[fil_col][fil_col], int MatAB[fil_col][fil_col], int n)
+{
+   for (int i=0; i<n; i++)
+   { for (int j=0; j<n; j++)
+     {
+        MatAB[i][j] = MatA[i][j] + MatB[i][j];
+     }
+   }
+}
+
+void MostrarMatrizCuadradaAB (int MatAB[fil_col][fil_col], int n) // funcion mostrar.
+{
+   cout<< "\n\n\tla suma matriz cuadrada A + B (n x n) es: ";
+   cout<< endl<< endl;
+
+   for (int i=0; i<n; i++)
+   { for (int j=0; j<n; j++)
+     {
+        cout<< "\t Mat A+B["<<i<<"]["<<j<<"]= ";
+        cout<< MatAB[i][j];
+     }
+
+     cout<< endl<< endl;
+
+   }
+}
