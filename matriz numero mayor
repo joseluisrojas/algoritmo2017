@@ -1,0 +1,82 @@
+// algoritmo.cpp : Defines the entry point for the console application.
+// ( numero mayor matriz. )
+// ( jose luis rojas quintanilla 05/09/2017. )
+                                                                                
+#include "stdafx.h" // librerias.
+#include <iostream>
+#include "conio.h"
+
+#define FIL 20 // definir tamaño del vector.
+#define COL 20
+
+using namespace std;
+
+void CargarMatriz (int MAT[FIL][COL], int N, int M); // prototipos.
+
+int Mayor (int MAT[FIL][COL], int N, int M);
+
+void main()
+{ int MAT[FIL][COL]={'\0'}, N, M, MAY ; // variables.
+ 
+  do // limite de elementos fila para calcular.
+   { 
+     cout<< "cantidad fila a calcular: ";
+     cin>> N;
+     cout<< endl;
+
+   } while ((N < 0) || (N >= FIL));
+
+  do // limite de elementos columna para calcular.
+   { 
+     cout<< "cantidad columna a calcular: ";
+     cin>> M;
+     cout<< endl;
+
+   } while ((M < 0) || (M >= COL));
+
+  CargarMatriz (MAT, N, M); // llamar funciones.
+
+  MAY = Mayor (MAT, N, M);
+
+  cout<< "el numero mayor de la matriz es : ";
+  cout<< MAY;
+  cout<< endl;
+
+  getch(); 
+
+}
+
+void CargarMatriz (int MAT[FIL][COL], int N, int M) // declarar funciones.
+{ cout<< "valores matriz MAT: ";
+  cout<< endl<< endl;
+	
+  for (int i=0; i<N; i=i+1)
+    { for (int j=0; j<M; j=j+1)
+	  { 
+	    cout<< "MAT["<< i <<"]["<< j <<"]= ";
+           cin>> MAT[i][j];
+           cout<< endl;
+         }
+    }
+}
+
+int Mayor (int MAT[FIL][COL], int N, int M)
+{ int MAY; 
+
+  MAY = MAT[0][0];
+
+  for (int i=0; i<N; i=i+1)
+    { for (int j=0; j<M; j=j+1)
+        { if (MAT[i][j] > MAY)
+           {
+             MAY = MAT[i][j];
+           }
+        }
+    }
+        
+  return (MAY);
+           
+}
+
+
+
