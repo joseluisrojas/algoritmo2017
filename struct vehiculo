@@ -1,0 +1,125 @@
+// proyecto.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+
+#define max 50
+
+using namespace std;
+
+struct tvehiculo
+{
+   int placa;
+   string marca;
+   string modelo;
+   int año;
+   int kilometraje;
+   int estado;
+};
+
+tvehiculo movilidad [max];
+
+int InsertarVehiculo ();
+bool ConsultarVehiculo(int N, int IDvehiculo);
+void main ()
+{ int N, IDvehiculo, opcion;
+  bool f;
+
+  N = InsertarVehiculo ();
+  f = ConsultarVehiculo (N, IDvehiculo);
+
+  getch();
+
+}
+
+int InsertarVehiculo ()
+{ int N, aux;
+
+  cout<<"ingrese la cantidad de vehiculos a insertar: ";
+  cin>> N;
+  cout<< endl;
+
+  for (int i=0; i<N; i++)
+  {
+     cout<< "ingrese el ID unico de vehiculo: ";
+     cin>> aux;
+
+     if (ConsultarVehiculo(N, aux) == true)
+     { 
+		 cout<< "ingrese la Placa de la movilidad: ";
+		 movilidad[i].placa = aux;
+		 cout<< endl;
+
+		 cout<< "ingrese la Marca de la movilidad: ";
+		 cin.ignore();
+		 getline(cin,movilidad[i].marca);
+		 cout<< endl;
+
+		 cout<< "ingrese el Modelo de la movilidad: ";
+		 getline(cin,movilidad[i].modelo);
+		 cout<< endl;
+
+		 cout<< "ingrese el Año de la movilidad: ";
+		 cin>>movilidad[i].año;
+		 cout<< endl;
+
+		 cout<< "ingrese el Kilometraje de la movilidad: ";
+		 cin>>movilidad[i].kilometraje;
+		 cout<< endl;
+
+		 movilidad[i].estado = 0;
+
+     }
+
+  getch();
+
+  }
+
+  return (N);
+}
+
+
+bool ConsultarVehiculo(int N, int IDvehiculo)
+{
+    bool band = true;
+
+    cout<<"ingrese el ID del vehiculo a consultar: ";
+    cin>> IDvehiculo;
+
+    for (int i=0; i<N; i++)
+    {
+        if (movilidad[i].placa == IDvehiculo)
+        {
+			cout<< " Marca de la Movilidad: ";
+			cout<< movilidad[i].marca;
+			cout<< endl;
+			cout<< " Modelo de la Movilidad: ";
+			cout<< movilidad[i].modelo;
+			cout<< endl;
+			cout<< " Año de la Movilidad: ";
+			cout<< movilidad[i].año;
+			cout<< endl;
+			cout<< " Kilometraje de la Movilidad: ";
+			cout<< movilidad[i].kilometraje;
+			cout<< endl;
+			cout<< " Marca de la Movilidad: ";
+			cout<< movilidad[i].marca;
+			cout<< endl;
+
+			band = false;
+
+			return(band);
+
+       }
+   }
+
+   if (band !=0);
+
+   return(band);
+ 
+}
+
+
