@@ -1,0 +1,256 @@
+// archivo.cpp : Defines the entry point for the console application.
+// proyecto Bien Cuidau (Alta_Secuencial, Lista_Secuencial, Consulta_Secuencial).
+// jose luis rojas quintanilla 07/11/2017.
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+#include "stdlib.h"
+
+using namespace std;
+
+void ALTA_SECUENCIAL();
+void LISTADO_SECUENCIAL();
+void CONSULTA_SECUENCIAL();
+
+struct tipo_movilidad
+{
+    int no_placa;
+    string marca_movilidad;
+    string clase_movilidad;
+    string tipo_movilidad;
+    int año_movilidad;
+    int kilometraje_movilidad;
+    char garantia;
+};
+
+tipo_movilidad RegMovilidad;
+
+FILE *alias;
+
+void main()
+{
+    int op;
+
+    do
+    {
+        cout<<"              MENU          "<<endl;
+        cout<<"(1) Adicionar-Insertar"<<endl;
+        cout<<"(2) Listado"<<endl;
+        cout<<"(3) Consulta"<<endl;
+        cout<<"(0) Salir"<<endl<<endl;
+                                   
+        cout<<"Ingrese la Opcion que desea: ";
+        cin>>op;
+                                               
+        switch(op)
+        {
+            case 1:
+            {
+                ALTA_SECUENCIAL();
+                break;
+            }
+                          
+            case 2:
+            {
+                LISTADO_SECUENCIAL();
+                break;
+            }
+		
+            case 3:
+            {
+                CONSULTA_SECUENCIAL();
+                break;
+            }
+		
+            case 0:
+            {
+                cout<<"Salir";
+                break;
+            }
+                                        
+            default:
+            {
+                cout<<"Error Opcion Invalida";
+            }
+                                                          
+        }
+                                     
+        system("cls"); 
+		
+    } while(op!=0);
+
+    getch();
+
+}
+
+void ALTA_SECUENCIAL() 
+{ 	
+    int no_placa ;  // Variable local para el numero de placa.
+                                                             
+    cout << "\n\rALTAS REGISTRO DE MOVILIDAD";
+                                                                      
+    alias = fopen("MOVILIDAD.SEC", "rb+"); // Intenta abrir el archivo en modo de lectura/escritura.
+                                                                                    
+    if (alias == NULL) 
+                                                                                    
+             alias = fopen("MOVILIDAD.SEC", "wb"); // Crea el archivo en caso de no existir. 
+                                                                                
+    cout << "\n\n\n\rNumero de placa: ";
+    cin >> no_placa;
+                                                                                        
+    fread(&RegMovilidad, sizeof(RegMovilidad), 1, alias); // Lee el "Registro", tamaño = sizeof(Registro) del archivo, recorre uno por uno ,"ptr".
+                                                                                                      
+    while(!feof(alias)) // Ciclo mientras no se encuentre el final del archivo.
+    { 
+        if(RegMovilidad.no_placa == no_placa) 
+        { 
+            cout << "\n\n\n\rPlaca duplicada !!!";
+                                                                             
+            fclose(alias);
+                                                                                     
+            getch();
+                                                                                         
+            return;
+        }
+                                                                                                                 
+        fread(&RegMovilidad, sizeof(RegMovilidad), 1, alias);
+                                                                                                                
+    }
+                                                                                                     
+    cout<< "\n\rMarca de Movilidad: ";
+    cin.ignore();
+    getline(cin, RegMovilidad.marca_movilidad);
+                                                                                                  
+    cout<< "\n\rClase de Movilidad: ";
+    getline(cin, RegMovilidad.clase_movilidad);
+                                                                                                   
+    cout<< "\n\rTipo de Movilidad: ";
+    getline(cin, RegMovilidad.tipo_movilidad);
+                                                                                                  
+    cout<< "\n\rAño de Movilidad: ";
+    cin>> RegMovilidad.año_movilidad;
+                                                                                                              
+    cout << "\n\rKilometraje de Movilidad: ";
+    cin >> RegMovilidad.kilometraje_movilidad; 
+                                                                                                    
+    do
+    {
+        cout << "\n\rGarantia: "; 
+        RegMovilidad.garantia = toupper( getche() ); 
+                                                                                           
+    } while ((RegMovilidad.garantia !='S') && (RegMovilidad.garantia !='N'));
+                                                                                    
+    RegMovilidad.no_placa = no_placa;
+                                                                                        
+    fwrite(&RegMovilidad, sizeof(RegMovilidad),1,alias); // Grabar el Registro.
+                                                                                                     
+    fclose(alias); // Cierra el archivo.
+                                                                                          
+    cout << "\n\n\n\rProducto registrado !!!";
+    cout << "\n\r<<< Oprima cualquier tecla para continuar >>>";
+                                                                                   
+    getch();
+                                                                                                   
+    return;
+}
+                                                                                             
+void LISTADO_SECUENCIAL() 
+{ 
+    cout << "\n\rLISTADO DE REGISTROS DE MOVILIDADES"; 
+                                                                                                                   
+    alias = fopen("MOVILIDAD.SEC", "rb"); // Intenta abrir el archivo (MOVILIDAD.SEC) en modo de solo lectura.
+                                                                                                                
+    if(alias == NULL)
+    {
+        cout << "\n\n\n\rNo existe el archivo !!!"; 
+        cout << "\n\r<<< Oprima cualquier tecla para continuar >>>";
+                                                                          
+        getch();
+                                                                                              
+        return;
+                                                                                                                                      
+    }
+                                                                                                                                                              
+    cout<< "\n\rNo Placa         Marca_Movilidad         Clase_Movilidad         Tipo_movilidad         Año_Movilidad         Kilometraje_Movilidad"<<endl;
+    cout << "\n\r----------------------------------------------------------------------------------------------------------------------------------"<<endl;
+                                                                                                                                
+    fread(&RegMovilidad, sizeof(RegMovilidad), 1, alias); // Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias".
+                                                                                                                                     
+    while(!feof(alias)) // Ciclo mientras no se encuentre el final del archivo.
+    {
+        cout<<RegMovilidad.no_placa<<"\t""\t"<<RegMovilidad.marca_movilidad<<"\t""\t"<<RegMovilidad.clase_movilidad<<"\t""\t"<<RegMovilidad.tipo_movilidad<<"\t""\t"<<RegMovilidad.año_movilidad<<"\t""\t"<<RegMovilidad.kilometraje_movilidad<<"\t""\t"<<RegMovilidad.garantia<<endl; 
+                                                                                                                                                                   
+        fread(&RegMovilidad, sizeof(RegMovilidad), 1, alias);
+                                                                                               
+    }
+                                                                                                                                                      
+    fclose(alias); // Cierra el archivo
+                                                                                                                                                    
+    cout << "\n\r----------------------------------------------------------------------------------------------------------------------------";
+    cout << "\n\rFin del listado !!!";
+    cout << "\n\r<<< Oprima cualquier tecla para continuar >>>";
+                                                                                                                
+    getch();
+                                                                                                    
+    return;                                                                                                    
+}
+
+
+void CONSULTA_SECUENCIAL() 
+{ 
+    int no_placa;
+                                                                                   
+    cout << "\n\rCONSULTA DE REGISTROS DE MOVILIDAD";
+                                                                                                                  
+    alias = fopen("Movilidad.SEC", "rb"); // Intenta abrir el archivo PRODUCTO.SEC en modo de solo lectura.
+                                                                                 
+    if(alias == NULL)
+    {
+        cout << "\n\n\n\rNo existe el archivo !!!"; 
+        cout << "\n\r<<< Oprima cualquier tecla para continuar >>>";
+                                                                          
+        getch();
+                                                                                                          
+        return;
+    }
+                                                                                                   
+    cout << "\n\n\n\rNumero de Placa: ";
+    cin >> no_placa;
+                                                                                                                                       
+    fread(&RegMovilidad, sizeof(RegMovilidad), 1, alias);   // Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias".
+                                                                                      
+    while( !feof(alias) ) 
+    {
+        if(RegMovilidad.no_placa == no_placa)
+        {
+            cout<< "\n\rNo Placa         Marca_Movilidad         Clase_Movilidad         Tipo_movilidad         Año_Movilidad         Kilometraje_Movilidad"<<endl;
+            cout << "\n\r----------------------------------------------------------------------------------------------------------------------------------"<<endl;
+                                                                                                                                                                                                                                                                                                 
+            cout<<RegMovilidad.no_placa<<"\t""\t"<<RegMovilidad.marca_movilidad<<"\t""\t"<<RegMovilidad.clase_movilidad<<"\t""\t"<<RegMovilidad.tipo_movilidad<<"\t""\t"<<RegMovilidad.año_movilidad<<"\t""\t"<<RegMovilidad.kilometraje_movilidad<<"\t""\t"<<RegMovilidad.garantia<<endl;
+                                                                                                                          
+            fclose(alias);
+                                                                                           
+            cout << "\n\r<<< Oprima cualquier tecla para continuar >>>";
+                                                                                  
+            getch();
+                                                                                                  
+            return;
+        }
+                                                                            
+        fread(&RegMovilidad, sizeof(RegMovilidad), 1, alias);
+                                                                    
+    }
+                                                                 
+    cout << "\n\rNo se encuentra ese registro !!!";
+                                                      
+    fclose(alias); // Cierra el archivo.
+                                                                            
+    cout << "\n\r<<< Oprima cualquier tecla para continuar >>>";
+                                                                     
+    getch();
+                                                                    
+    return;
+}
+
