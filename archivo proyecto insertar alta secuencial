@@ -1,0 +1,117 @@
+// archivo.cpp : Defines the entry point for the console application.
+// proyecto Bien Cuidau (Insertar Alta_Secuencial).
+// jose luis rojas quintanilla 09/11/2017.
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+#include "stdlib.h"
+
+using namespace std;
+
+void insertar_alta_secuencial();
+
+struct Registro_Movilidad
+{
+    string no_placa;
+    string marca_movilidad;
+    string clase_movilidad;
+    string tipo_movilidad;
+    string color_movilidad;
+    int modelo_movilidad;
+    string kilometraje_movilidad;
+    char garantia;
+};
+
+Registro_Movilidad RegMovilidad;
+
+FILE *ptr;
+
+int main()
+{
+    insertar_alta_secuencial();
+
+    getch();
+
+    return(0);
+}
+
+void insertar_alta_secuencial()
+{
+    string no_placa;
+
+    cout<<"\t\t    REGISTRO DE MOVILIDAD"<<endl;
+    cout<<"\t\t-----------------------------";
+    cout<<endl<<endl<<endl ;
+
+    ptr = fopen("MOVILIDAD.SEC","rb+");
+    if(ptr == NULL)
+           ptr = fopen("MOVILIDAD.SEC","wb");
+
+
+    cout<<"ingrese el numero de placa:  ";
+    getline(cin, RegMovilidad.no_placa);
+    cout<<endl;
+
+
+    fread(&RegMovilidad, sizeof(RegMovilidad), 1, ptr);
+    while(!feof(ptr))
+    {
+        if(RegMovilidad.no_placa == no_placa)
+        {
+            cout<<"error placa duplicada";
+            fclose(ptr);
+            getch();
+            return;
+        }
+        fread(&RegMovilidad, sizeof(RegMovilidad), 1, ptr);
+    }
+
+
+    cout<<"Registre Marca de la Movilidad:  ";
+    getline(cin, RegMovilidad.marca_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Clase de la Movilidad:  ";
+    getline(cin, RegMovilidad.clase_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Tipo de la Movilidad:  ";
+    getline(cin, RegMovilidad.tipo_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Color de la Movilidad:  ";
+    getline(cin, RegMovilidad.color_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Modelo de la Movilidad:  ";
+    cin>>RegMovilidad.modelo_movilidad;
+    cout<<endl;
+
+    cout<<"Registre Kilometraje de la Movilidad:  ";
+    cin.ignore();
+    getline(cin, RegMovilidad.kilometraje_movilidad);
+    cout<<endl;
+
+    do
+    {
+        cout<<"registre Garantia de la Movilidad:  ";
+        RegMovilidad.garantia = toupper(getche());
+    } while ((RegMovilidad.garantia !='S') && (RegMovilidad.garantia !='N'));
+    cout<<endl<<endl<<endl;
+
+
+    RegMovilidad.no_placa = no_placa;
+
+
+    fwrite(&RegMovilidad, sizeof(RegMovilidad), 1, ptr);
+
+    cout<<"---------------------------------------------------"<<endl;
+    cout<<"\tRegistro de la Movilidad Completado"<<endl;
+    cout<<"\tDigite cualquier tecla para Continuar";
+
+    getch();
+
+    return;
+}
