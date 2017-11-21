@@ -1,0 +1,382 @@
+// archivo.cpp : Defines the entry point for the console application.
+// proyecto Bien Cuidau cliente (Registro, Listado, Modificado, Consulta, Borrado Logico).
+// jose luis rojas quintanilla 20/11/2017.
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+#include "stdlib.h"
+
+using namespace std;
+
+void REGISTRO_ALTA_CLIENTE(void);
+void LISTADO_CLIENTE(void);
+void MODIFICACION_CLIENTE(void); 
+void CONSULTA_CLIENTE(void);
+void BORRADO_BAJA_LOGICA_CLIENTE(void);
+
+struct Registro_Cliente
+{ 
+	int Nro_Cliente;
+	string nombre_apellido;
+	string direccion;
+	string telefono_celular;
+	string correo_electronico;
+};
+
+Registro_Cliente RegCliente;
+FILE *alias;
+
+void main()
+{
+	int opcion;
+	do
+	{
+		cout<<"\n ------------------------------------------------------------------------------";
+		cout<<"                                     MENU                                        ";
+		cout<<"                             REGISTRO DEL CLIENTE                                ";
+		cout<<"------------------------------------------------------------------------------   ";
+
+		cout<<"\n\n (1) Registro del Cliente";
+		cout<<"\n (2) Listado del Cliente";
+		cout<<"\n (3) Modificacion del Cliente";
+		cout<<"\n (4) Consulta del Cliente";
+		cout<<"\n (5) Borrado del Cliente";
+		cout<<"\n (0) Salir Menu";
+		cout<<"\n\n Ingrese la opcion que desea: ";
+		cin>>opcion;
+		switch(opcion)
+		{
+		case 1:			
+			REGISTRO_ALTA_CLIENTE();
+			break;			
+		case 2:			
+			LISTADO_CLIENTE();
+			break;			
+		case 3:
+			MODIFICACION_CLIENTE();
+			break;
+		case 4:
+			CONSULTA_CLIENTE();
+			break;
+		case 5:
+			BORRADO_BAJA_LOGICA_CLIENTE();
+			break;
+		case 0:
+			cout<<"Salir del Menu";
+			break;
+		default:
+			cout<<"Error Opcion Invalida";
+			break;
+		}
+	}while(opcion !=0);
+	getch();
+}
+
+
+void REGISTRO_ALTA_CLIENTE(void)
+{ 	
+	int id_RegCliente;
+
+	cout<<"\n                   ----------------------------------                  "; 
+	cout<<"\n                          REGISTRO DEL CLIENTE                         ";
+	cout<<"\n                   ----------------------------------                  ";
+
+	alias=fopen("CLIENTE.SEC","rb+");   
+	if(alias==NULL) 
+		alias=fopen("CLIENTE.SEC","wb");  
+
+	cout <<"\n\n Digite id Registro del Cliente:  ";
+	cin>>id_RegCliente;
+
+	fread(&RegCliente,sizeof(RegCliente),1,alias);  
+	while(!feof(alias)) 
+	{ 
+		if(RegCliente.Nro_Cliente==id_RegCliente) 
+		{ 
+			cout<<"\n\n Error el Registro de Cliente Duplicado !!!";
+			fclose(alias); 
+			getch(); 
+			return; 
+		} 
+		fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	}
+	cout<<"\n               ------------------------------------------------              ";
+	cout<<"\n                Ingrese los Datos del Clienteq Decea Registrar               ";
+	cout<<"\n               ------------------------------------------------              ";
+
+	cout<<"\n\n Ingrese Nombre y Apellido:  ";
+	cin.ignore();
+	getline(cin,RegCliente.nombre_apellido);
+	cout<<"\n Ingrese Direccion:  ";
+	getline(cin,RegCliente.direccion);
+	cout<<"\n Ingrese Celular:  ";
+	getline(cin,RegCliente.telefono_celular);
+	cout<<"\n Ingrese Correo Electronico:  ";
+	getline(cin,RegCliente.correo_electronico);
+
+	RegCliente.Nro_Cliente=id_RegCliente; 
+	fwrite(&RegCliente,sizeof(RegCliente),1,alias);   
+	fclose(alias);  
+	cout<<"\n              -----------------------------------------------    ";
+	cout<<"\n                   REGISTRO DEL CLIENTE COMPLETADO               ";
+	cout<<"\n               <<< Digite cualquier tecla para continuar >>>     ";
+	getch(); 
+	return; 
+} 
+
+
+void LISTADO_CLIENTE(void) 
+{ 
+	cout<<"\n                           ---------------------                   "; 
+	cout<<"\n                            LISTADO DEL CLIENTE                    ";
+	cout<<"\n                           ---------------------                   ";
+
+	alias=fopen("CLIENTE.SEC","rb");            
+	if(alias==NULL) 
+	{ 
+		cout<<"\n\n       Error No Existe el Archivo !!!       ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+
+
+	fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	while(!feof(alias))  
+	{
+		cout<<"\n\n ------------------------------------------------------------------------------";
+		cout<<"\n Registro id Cliente                      Nombre y Apellido                      ";
+		cout<<"\n--------------------     --------------------------------------------------------";
+		cout<<"\n\t "<<RegCliente.Nro_Cliente<<"\t\t\t"<<RegCliente.nombre_apellido;
+		cout<<"\n\n-------------------------------------------------------------------------------";
+		cout<<"\n Direccion                                                 Numero Celular        ";
+		cout<<"\n-------------------------------------------------   -----------------------------";
+		cout<<"\n "<<RegCliente.direccion<<"\t\t\t\t"<<RegCliente.telefono_celular;
+		cout<<"\n\n--------------------------------------------------------------------------------";
+		cout<<"\n  Correo Electronico";
+		cout<<"\n---------------------------------------------";
+		cout<<"\n "<<RegCliente.correo_electronico;
+
+		fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	}
+	fclose(alias);
+
+	cout<<"\n              -----------------------------------------------  ";
+	cout<<"\n                  LISTADO DEL REGISTRO CLIENTE COMPLETADO      ";
+	cout<<"\n               <<< Digite cualquier tecla para continuar >>>   ";
+	getch(); 
+	return; 
+}
+
+
+void MODIFICACION_CLIENTE(void) 
+{ 
+	int id_Modificacion; 
+	cout<<"\n                   ------------------------------------------                    "; 
+	cout<<"\n                      MODIFICACION DEL REGISTRO DEL CLIENTE                      ";
+	cout<<"\n                   ------------------------------------------                    ";
+
+	alias=fopen("CLIENTE.SEC","rb+");                             
+	if(alias==NULL)  
+	{ 
+		cout<<"\n\n        Error No Existe el Archivo !!!      ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+	cout<<"\nDigite id Registro q Decea Modificar:  ";
+	cin>>id_Modificacion;
+
+	fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	while(!feof(alias))  
+	{ 
+		if(RegCliente.Nro_Cliente==id_Modificacion) 
+		{
+			cout<<"\n\n             -----------------------------------------                 ";
+			cout<<"\n                DETALE DEL REGISTRO CLIENTE A MODIFICAR                  ";
+			cout<<"\n               -----------------------------------------                 ";
+
+			cout<<"\n\n ------------------------------------------------------------------------------";
+			cout<<"\n Registro id Cliente                      Nombre y Apellido                      ";
+			cout<<"\n--------------------     --------------------------------------------------------";
+			cout<<"\n\t "<<RegCliente.Nro_Cliente<<"\t\t\t"<<RegCliente.nombre_apellido;
+			cout<<"\n\n-------------------------------------------------------------------------------";
+			cout<<"\n Direccion                                                 Numero Celular        ";
+			cout<<"\n-------------------------------------------------   -----------------------------";
+			cout<<"\n "<<RegCliente.direccion<<"\t\t\t\t"<<RegCliente.telefono_celular;
+			cout<<"\n\n--------------------------------------------------------------------------------";
+			cout<<"\n  Correo Electronico";
+			cout<<"\n---------------------------------------------";
+			cout<<"\n "<<RegCliente.correo_electronico;
+			cout<<"\n                --------------------------------------------                    ";
+			cout<<"\n\n               Ingrese los Nuevos Datos q Decea Modificar                     ";
+			cout<<"\n                --------------------------------------------                    ";
+
+			cout<<"\n\n Ingrese Nombre y Apellido:  ";
+			cin.ignore();
+			getline(cin,RegCliente.nombre_apellido);
+			cout<<"\n Ingrese Direccion:  ";
+			getline(cin,RegCliente.direccion);
+			cout<<"\n Ingrese Celular:  ";
+			getline(cin,RegCliente.telefono_celular);
+			cout<<"\n Ingrese Correo Electronico:  ";
+			getline(cin,RegCliente.correo_electronico);
+
+			fseek(alias,ftell(alias)-sizeof(RegCliente),SEEK_SET); 
+			fwrite(&RegCliente,sizeof(RegCliente),1,alias);   
+			fclose(alias);
+
+			cout<<"\n          ----------------------------------------------------  ";
+			cout<<"\n              MODIFICACION DEL REGISTRO CLIENTE COMPLETADO      ";
+			cout<<"\n             <<< Digite cualquier tecla para continuar >>>      ";
+			getch(); 
+			return; 
+		}
+		fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	} 
+	cout << "\n\Error no Existe el Registro !!!"; 
+	fclose(alias); 
+
+	cout<<"\n       <<< Digite cualquier tecla para continuar >>>      "; 
+	getch(); 
+	return; 
+} 
+
+void CONSULTA_CLIENTE(void) 
+{ 
+	int id_Consulta; 
+	cout<<"\n                   --------------------------------------                   "; 
+	cout<<"\n                            CONSULTA DEL CLIENTE                            ";
+	cout<<"\n                   --------------------------------------                   ";
+
+	alias=fopen("CLIENTE.SEC","rb");  
+	if(alias==NULL) 
+	{ 
+		cout<<"\n\n        Error No Existe el Archivo !!!      ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+	cout<<"\nDigite id Registro q Decea Consultar:  ";
+	cin>>id_Consulta;
+
+	fread(&RegCliente,sizeof(RegCliente),1,alias);    
+	while(!feof(alias))  
+	{ 
+		if(RegCliente.Nro_Cliente==id_Consulta) 
+		{ 
+			cout<<"\n\n       -----------------------------------------------------------------                 ";
+			cout<<"\n             DETALLE DE LA CONSULTA DEL REGISTRO DEL CLIENTE DEL MOTOR                     ";
+			cout<<"\n         -----------------------------------------------------------------                 ";
+			cout<<"\n\n ------------------------------------------------------------------------------";
+			cout<<"\n Registro id Cliente                      Nombre y Apellido                      ";
+			cout<<"\n--------------------     --------------------------------------------------------";
+			cout<<"\n\t "<<RegCliente.Nro_Cliente<<"\t\t\t"<<RegCliente.nombre_apellido;
+			cout<<"\n\n-------------------------------------------------------------------------------";
+			cout<<"\n Direccion                                                 Numero Celular        ";
+			cout<<"\n-------------------------------------------------   -----------------------------";
+			cout<<"\n "<<RegCliente.direccion<<"\t\t\t\t"<<RegCliente.telefono_celular;
+			cout<<"\n\n--------------------------------------------------------------------------------";
+			cout<<"\n  Correo Electronico";
+			cout<<"\n---------------------------------------------";
+			cout<<"\n "<<RegCliente.correo_electronico;
+
+			fclose(alias); 
+			cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+			getch(); 
+			return; 
+		} 
+		fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	} 
+	cout << "\n\Error no Existe el Registro !!!"; 
+	fclose(alias);
+
+	cout<<"\n             --------------------------------------------- ";
+	cout<<"\n\t                  CONSULTA DEL CLIENTE COMPLETADO        ";
+	cout<<"\n\t           <<< Digite cualquier tecla para continuar >>> ";
+	getch(); 
+	return; 
+}
+
+
+void BORRADO_BAJA_LOGICA_CLIENTE(void) 
+{ 
+	int id_Borrado; 
+	char op;
+
+	cout<<"\n                   -------------------------------------                    "; 
+	cout<<"\n                     BORRADO DEL REGISTRO DEL CLIENTE                       ";
+	cout<<"\n                   -------------------------------------                    ";
+
+	alias=fopen("CLIENTE.SEC","rb+");  
+	if(alias==NULL)   
+	{ 
+		cout<<"\n\n        Error No Existe el Archivo !!!      ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+	cout<<"\nDigite id Registro q Decea Borrar:  "; 
+	cin >>id_Borrado;
+
+	fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	while(!feof(alias))  
+	{ 
+		if(RegCliente.Nro_Cliente==id_Borrado) 
+		{ 
+			cout<<"\n\n       --------------------------------------------------------------                ";
+			cout<<"\n             DETALLE DEL BORRADO DEL REGISTRO DEL CLIENTE DEL MOTOR                    ";
+			cout<<"\n         --------------------------------------------------------------                ";
+			cout<<"\n\n ------------------------------------------------------------------------------";
+			cout<<"\n Registro id Cliente                      Nombre y Apellido                      ";
+			cout<<"\n--------------------     --------------------------------------------------------";
+			cout<<"\n\t "<<RegCliente.Nro_Cliente<<"\t\t\t"<<RegCliente.nombre_apellido;
+			cout<<"\n\n-------------------------------------------------------------------------------";
+			cout<<"\n Direccion                                                 Numero Celular        ";
+			cout<<"\n-------------------------------------------------   -----------------------------";
+			cout<<"\n "<<RegCliente.direccion<<"\t\t\t\t"<<RegCliente.telefono_celular;
+			cout<<"\n\n--------------------------------------------------------------------------------";
+			cout<<"\n  Correo Electronico";
+			cout<<"\n---------------------------------------------";
+			cout<<"\n "<<RegCliente.correo_electronico;
+
+			RegCliente.Nro_Cliente=0; 
+			RegCliente.nombre_apellido="";
+			RegCliente.direccion="";
+			RegCliente.telefono_celular="";
+			RegCliente.correo_electronico=""; 
+
+			do 
+			{ 
+				cout << "\n\n\Esta seguro que desea borrarlo? [S/N] ---> "; 
+				op=toupper(getche()); 
+			}while((op !='S') && (op !='N'));
+
+			if(op=='S') 
+			{ 
+				fseek(alias,ftell(alias)-sizeof(RegCliente),SEEK_SET);      
+				fwrite(&RegCliente,sizeof(RegCliente),1,alias);                                     
+				cout << "\n\n\n\rRegistro Eliminado !!!"; 
+			} 
+			fclose(alias);   
+			cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+			getch(); 
+			return; 
+		} 
+		fread(&RegCliente,sizeof(RegCliente),1,alias); 
+	} 
+	cout << "\n\Error no Existe el Registro !!!";  
+	fclose(alias);
+
+	cout<<"\n             --------------------------------------------------  ";
+	cout<<"\n                 BORRADO DEL REGISTRO DEL CLIENTE COMPLETADO      ";
+	cout<<"\n                <<< Digite cualquier tecla para continuar >>>     ";
+	getch(); 
+	return; 
+}
