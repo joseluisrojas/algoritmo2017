@@ -1,0 +1,143 @@
+// archivo.cpp : Defines the entry point for the console application.
+// proyecto Bien Cuidau (Insertar Alta Directa).
+// jose luis rojas quintanilla 07/11/2017.
+
+#include "stdafx.h" //librerias.
+#include <iostream>
+#include "conio.h"
+#include <string>
+#include "stdlib.h"
+
+using namespace std;
+
+void insertar_alta_directa();  //prototipo.
+
+struct Registro_Movilidad //equivale a un tipo de dato. 
+{
+    string no_placa; //clave o identificador primaria
+    string marca_movilidad;
+    string clase_movilidad;
+    string tipo_movilidad;
+    string color_movilidad;
+    int modelo_movilidad;
+    string kilometraje_movilidad;
+    char garantia;
+};
+
+Registro_Movilidad RegMovilidad; //nombre q le damos al registro del struct (RegMovilidad).
+
+FILE *ptr; //declarando el buffer q apunta al archivo en el disco duro.
+
+int main()
+{
+    insertar_alta_directa(); //llamando a la funcion Isertar Alta Secuencial.
+
+    getch();
+
+    return(0);
+}
+
+void insertar_alta_directa() 
+{
+    string no_placa; //declaramos la variable local para la clave primaria.
+    Long dir_fisica;
+                                                                            
+    cout<<"\t\t    REGISTRO DE MOVILIDAD"<<endl;
+    cout<<"\t\t-----------------------------";
+    cout<<endl<<endl<<endl ;
+
+
+    //CREANDO EL ARCHIVO.
+                                                                                                       
+    ptr = fopen("MOVILIDAD.DIR","rb+"); //primer intento de abrir (fopen) el archivo con nombre (MOVILIDAD) y extencion secuencial (.SEC), en modo lectura-escritura (rb+).
+                                                                                                                                                                              
+    if(ptr == NULL) //condicion si el buffer es igual comparacion (==) a verdadero (NULL).
+                                                                                                                                                                                                    
+           ptr = fopen("MOVILIDAD.DIR","wb"); //crea el archivo con nombre (MOVILIDAD) y extencion secuencial (.SEC), en modo escritura (wb).
+                                                                                                          
+                                                                                                     
+                                                                                                                                            
+    //INGRESAMOS CLAVE PRIMARIA (no_placa).
+                                                                                                                    
+    cout<<"ingrese el numero de placa:  ";
+    getline(cin, RegMovilidad.no_placa);
+    cout<<endl;
+                                                                                                                   
+                                                                                                                              
+    //CALCULANDO DIRECCION FISICA (dir_fisica).
+                                                                                                                            
+    dir_fisica = no_placa * sizeof(RegMovilidad); //calculo direccion fisica.
+                                                                                                                                                                     
+    fseek(ptr, dir_fisica, SEEK_SET); //buffer q apunta al archivo, direccion fisica, pocicion del puntero en el archivo directamente en el registro solicitado.
+                                                                                                                                                                     
+                                                                                                                                                                           
+                                                                                                                                       
+    //LEER EL ARCHIVO CREADO.
+                                                                                                                   
+    fread(&RegMovilidad, sizeof(RegMovilidad), 1, ptr);
+    while(!feof(ptr))
+    {
+        if(RegMovilidad.no_placa == no_placa)
+        {
+            cout<<"error placa duplicada";
+            fclose(ptr);
+            getch();
+            return;
+        }
+        fread(&RegMovilidad, sizeof(RegMovilidad), 1, ptr);
+    }
+
+
+    cout<<"Registre Marca de la Movilidad:  ";
+    getline(cin, RegMovilidad.marca_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Clase de la Movilidad:  ";
+    getline(cin, RegMovilidad.clase_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Tipo de la Movilidad:  ";
+    getline(cin, RegMovilidad.tipo_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Color de la Movilidad:  ";
+    getline(cin, RegMovilidad.color_movilidad);
+    cout<<endl;
+
+    cout<<"Registre Modelo de la Movilidad:  ";
+    cin>>RegMovilidad.modelo_movilidad;
+    cout<<endl;
+
+    cout<<"Registre Kilometraje de la Movilidad:  ";
+    cin.ignore();
+    getline(cin, RegMovilidad.kilometraje_movilidad);
+    cout<<endl;
+
+    do
+    {
+        cout<<"registre Garantia de la Movilidad:  ";
+        RegMovilidad.garantia = toupper(getche());
+                                                                                                                                    
+    } while ((RegMovilidad.garantia !='S') && (RegMovilidad.garantia !='N'));
+    cout<<endl<<endl<<endl;
+
+
+    RegMovilidad.no_placa = no_placa; // asignamos la clave primaria (no_placa) al registro.
+                                                                                                                   
+                                                                                                        
+	fseek(ptr, dir_fisica, SEEK_SET); //posicionar el puntero en el archivo seleccionado.
+                                                                                                         
+                                                                                                                
+    fwrite(&RegMovilidad, sizeof(RegMovilidad), 1, ptr); //grabar el archivo.
+                                                                                                                  
+    cout<<"---------------------------------------------------"<<endl;
+    cout<<"\tRegistro de la Movilidad Completado"<<endl;
+    cout<<"\tDigite cualquier tecla para Continuar";
+
+    getch();
+
+    return;
+}
+
+
+
