@@ -1,0 +1,446 @@
+// archivo.cpp : Defines the entry point for the console application.
+// proyecto Bien Cuidau Mantenimiento del Motor (Registro, Listado, Modificado, Consulta, Borrado Logico).
+// jose luis rojas quintanilla 20/11/2017.
+
+#include "stdafx.h"
+#include <iostream>
+#include "conio.h"
+#include <string>
+#include "stdlib.h"
+
+using namespace std;
+
+void REGISTRO_ALTA_MOTOR(void);
+void LISTADO_MOTOR(void);
+void MODIFICACION_MOTOR(void); 
+void CONSULTA_MOTOR(void);
+void BORRADO_BAJA_LOGICA_MOTOR(void);
+
+struct Registro_Situacion_Motor
+{
+	int Nro_RegMotor;
+	string marca_aceite;
+	string numero_aceite;
+	string litros_aceite;
+	string filtro_aceite;
+	char filtro_aire;
+	char filtro_gasolina;
+	char filtro_diesel;
+	char engrase;
+	string kilometraje_actual;
+	string kilometraje_proximo_cambio;
+	string fecha_cambio_aceite;
+};
+
+Registro_Situacion_Motor RegMotor;
+FILE *alias;
+
+void main()
+{
+	int opcion;
+	do
+	{
+		cout<<"\n ------------------------------------------------------------------------------";
+		cout<<"                                     MENU                                        ";
+		cout<<"                         REGISTRO SITUACION DEL MOTOR                            ";
+		cout<<"------------------------------------------------------------------------------   ";
+		cout<<"\n\n (1) Registro Mantenimiento del Motor";
+		cout<<"\n (2) Listado Mantenimiento Motor";
+		cout<<"\n (3) Modificacion Mantenimiento Motor";
+		cout<<"\n (4) Consulta Mantenimiento del Motor";
+		cout<<"\n (5) Borrado Mantenimiento Motor";
+		cout<<"\n (0) Salir del Menu";
+		cout<<"\n Ingrese la opcion que desea: ";
+		cin>>opcion;
+		switch(opcion)
+		{
+		case 1:			
+			REGISTRO_ALTA_MOTOR();
+			break;			
+		case 2:			
+			LISTADO_MOTOR();
+			break;			
+		case 3:
+			MODIFICACION_MOTOR();
+			break;
+		case 4:
+			CONSULTA_MOTOR();
+			break;
+		case 5:
+			BORRADO_BAJA_LOGICA_MOTOR();
+			break;
+		case 0:
+			cout<<"Salir del Menu";
+			break;
+		default:
+			cout<<"Error Opcion Invalida";
+			break;
+		}
+	}while(opcion !=0);
+	getch();
+}
+
+
+void REGISTRO_ALTA_MOTOR(void)
+{ 	
+	int id_RegMotor;
+
+	cout<<"\n                   --------------------------------------                    "; 
+	cout<<"\n                    REGISTRO DEL MANTENIMIENTO DEL MOTOR                     ";
+	cout<<"\n                   --------------------------------------                    ";
+
+	alias=fopen("MOTOR.SEC","rb+");   
+	if(alias==NULL) 
+		alias=fopen("MOTOR.SEC","wb");  
+
+	cout << "\n\n\Digite id Registro del Motor:  ";
+	cin>>id_RegMotor;
+
+	fread(&RegMotor,sizeof(RegMotor),1,alias);  
+	while(!feof(alias)) 
+	{ 
+		if(RegMotor.Nro_RegMotor==id_RegMotor) 
+		{ 
+			cout<<"\n\n Error el Registro de Motor Duplicado !!!";
+			fclose(alias); 
+			getch(); 
+			return; 
+		} 
+		fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	}
+	cout<<"\n               -------------------------------------------              ";
+	cout<<"\n                Ingrese Todos los Datos q Decea Registrar               ";
+	cout<<"\n               -------------------------------------------              ";
+
+	cout<<"\n\n Ingrese la Marca de Aceite q Usa:  ";
+	cin.ignore();
+	getline(cin,RegMotor.marca_aceite);
+	cout<<"\n Ingrese el Numero de Aceite q Usa:  ";
+	getline(cin,RegMotor.numero_aceite);
+	cout<<"\n Ingrese los Litros de Aceite q Usa:  ";
+	getline(cin,RegMotor.litros_aceite);
+	cout<<"\n Ingrese el Filtro de Aceite q Usa:  ";
+	getline(cin,RegMotor.filtro_aceite);
+	do
+	{
+		cout<<"\n Cambio el Filtro de Aire q Usa:  ";
+		RegMotor.filtro_aire=toupper(getche());
+	}while((RegMotor.filtro_aire !='S') && (RegMotor.filtro_aire !='N'));
+	do
+	{
+		cout<<"\n\n Cambio el Filtro de Gasolina q Usa:  ";
+		RegMotor.filtro_gasolina=toupper(getche());
+	}while((RegMotor.filtro_gasolina !='S') && (RegMotor.filtro_gasolina !='N'));
+	do
+	{
+		cout<<"\n\n Cambio el Filtro de Diesel q Usa:  ";
+		RegMotor.filtro_diesel=toupper(getche());
+	}while((RegMotor.filtro_diesel !='S') && (RegMotor.filtro_diesel !='N'));
+	do
+	{
+		cout<<"\n\n Se Realizo el Engrase:  ";
+		RegMotor.engrase=toupper(getche());
+	}while((RegMotor.engrase !='S') && (RegMotor.engrase !='N'));
+	cout<<"\n\n Ingrese el Kilometraje Actual del Motor:  ";
+	cin.ignore();
+	getline(cin,RegMotor.kilometraje_actual);
+	cout<<"\n Ingrese el Kilometraje Proximo Cambio de Aceite:  ";
+	cin.ignore();
+	getline(cin,RegMotor.kilometraje_proximo_cambio);
+	cout<<"\n Ingrese la Fecha del Cambio de Aceite:  ";
+	cin.ignore();
+	getline(cin,RegMotor.fecha_cambio_aceite);
+
+	RegMotor.Nro_RegMotor=id_RegMotor; 
+	fwrite(&RegMotor,sizeof(RegMotor),1,alias);   
+	fclose(alias);  
+	cout<<"\n              -----------------------------------------------     ";
+	cout<<"\n                   REGISTRO DEL MANTENIMIENTO COMPLETADO          ";
+	cout<<"\n               <<< Digite cualquier tecla para continuar >>>      ";
+	getch(); 
+	return; 
+} 
+
+
+void LISTADO_MOTOR(void) 
+{ 
+	cout<<"\n                   -------------------------------------                    "; 
+	cout<<"\n                    LISTADO DEL MANTENIMIENTO DEL MOTOR                     ";
+	cout<<"\n                   -------------------------------------                    ";
+
+	alias=fopen("MOTOR.SEC","rb");            
+	if(alias==NULL) 
+	{ 
+		cout<<"\n\n       Error No Existe el Archivo !!!       ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+	fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	while(!feof(alias))  
+	{
+		cout<<"\n\n-------------------------------------------------------------------------------";
+		cout<<"\n Registro id Motor   Marca de Aceite   Numero de Aceite   Litros de Aceite ";
+		cout<<"\n------------------   ---------------   ----------------   ---------------- ";
+		cout<<"\n\t"<<RegMotor.Nro_RegMotor<<"\t\t"<<RegMotor.marca_aceite<<"\t         "<<RegMotor.numero_aceite<<"\t\t "<<RegMotor.litros_aceite; 
+		cout<<"\n Filtro de Aceite   Filtro de Aire   Filtro de Gasolina   Filtro de Diesel ";
+		cout<<"\n-----------------   --------------   ------------------   ---------------- ";
+		cout<<"\n "<<RegMotor.filtro_aceite<<"\t\t   "<<RegMotor.filtro_aire<<"\t\t   "<<RegMotor.filtro_gasolina<<"\t\t\t  "<<RegMotor.filtro_diesel;
+		cout<<"\n engrase   Kilometraje Actual   Kilometraje ProxCambio   Fecha Cambio Aceite ";
+		cout<<"\n--------   ------------------   ----------------------   ------------------- ";
+		cout<<"\n    "<<RegMotor.engrase<<"\t     "<<RegMotor.kilometraje_actual<<"\t\t   "<<RegMotor.kilometraje_proximo_cambio<<"\t\t   "<<RegMotor.fecha_cambio_aceite;
+
+		fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	}
+	fclose(alias);
+
+	cout<<"\n              -----------------------------------------------  ";
+	cout<<"\n                   LISTADO DEL MANTENIMIENTO COMPLETADO        ";
+	cout<<"\n               <<< Digite cualquier tecla para continuar >>>   ";
+	getch(); 
+	return; 
+}
+
+
+void MODIFICACION_MOTOR(void) 
+{ 
+	int id_Modificacion; 
+	cout<<"\n                   ------------------------------------------                    "; 
+	cout<<"\n                    MODIFICACION DEL MANTENIMIENTO DEL MOTOR                     ";
+	cout<<"\n                   ------------------------------------------                    ";
+
+	alias=fopen("MOTOR.SEC","rb+");                             
+	if(alias==NULL)  
+	{ 
+		cout<<"\n\n        Error No Existe el Archivo !!!      ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+	cout<<"\nDigite id Registro q Decea Modificar:  ";
+	cin>>id_Modificacion;
+
+	fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	while(!feof(alias))  
+	{ 
+		if(RegMotor.Nro_RegMotor==id_Modificacion) 
+		{
+			cout<<"\n\n             ---------------------------------------                 ";
+			cout<<"\n                DETALE DEL REGISTRO MOTOR A MODIFICAR                  ";
+			cout<<"\n               ---------------------------------------                 ";
+
+			cout<<"\n\n-------------------------------------------------------------------------------";
+			cout<<"\n Registro id Motor   Marca de Aceite   Numero de Aceite   Litros de Aceite ";
+			cout<<"\n------------------   ---------------   ----------------   ---------------- ";
+			cout<<"\n\t"<<RegMotor.Nro_RegMotor<<"\t\t"<<RegMotor.marca_aceite<<"\t         "<<RegMotor.numero_aceite<<"\t\t "<<RegMotor.litros_aceite; 
+			cout<<"\n Filtro de Aceite   Filtro de Aire   Filtro de Gasolina   Filtro de Diesel ";
+			cout<<"\n-----------------   --------------   ------------------   ---------------- ";
+			cout<<"\n "<<RegMotor.filtro_aceite<<"\t\t   "<<RegMotor.filtro_aire<<"\t\t   "<<RegMotor.filtro_gasolina<<"\t\t\t  "<<RegMotor.filtro_diesel;
+			cout<<"\n engrase   Kilometraje Actual   Kilometraje ProxCambio   Fecha Cambio Aceite ";
+			cout<<"\n--------   ------------------   ----------------------   ------------------- ";
+			cout<<"\n    "<<RegMotor.engrase<<"\t     "<<RegMotor.kilometraje_actual<<"\t\t   "<<RegMotor.kilometraje_proximo_cambio<<"\t\t   "<<RegMotor.fecha_cambio_aceite;
+
+			cout<<"\n                --------------------------------------------                    ";
+			cout<<"\n\n               Ingrese los Nuevos Datos q Decea Modificar                     ";
+			cout<<"\n                --------------------------------------------                    ";
+
+			cout<<"\n\n Ingrese la Marca de Aceite q Usa:  ";
+			cin.ignore();
+			getline(cin,RegMotor.marca_aceite);
+			cout<<"\n Ingrese el Numero de Aceite q Usa:  ";
+			getline(cin,RegMotor.numero_aceite);
+			cout<<"\n Ingrese los Litros de Aceite q Usa:  ";
+			getline(cin,RegMotor.litros_aceite);
+			cout<<"\n Ingrese el Filtro de Aceite q Usa:  ";
+			getline(cin,RegMotor.filtro_aceite);
+			do
+			{
+				cout<<"\n Cambio el Filtro de Aire q Usa:  ";
+				RegMotor.filtro_aire=toupper(getche());
+			}while((RegMotor.filtro_aire !='S') && (RegMotor.filtro_aire !='N'));
+			do
+			{
+				cout<<"\n\n Cambio el Filtro de Gasolina q Usa:  ";
+				RegMotor.filtro_gasolina=toupper(getche());
+			}while((RegMotor.filtro_gasolina !='S') && (RegMotor.filtro_gasolina !='N'));
+			do
+			{
+				cout<<"\n\n Cambio el Filtro de Diesel q Usa:  ";
+				RegMotor.filtro_diesel=toupper(getche());
+			}while((RegMotor.filtro_diesel !='S') && (RegMotor.filtro_diesel !='N'));
+			do
+			{
+				cout<<"\n\n Se Realizo el Engrase:  ";
+				RegMotor.engrase=toupper(getche());
+			}while((RegMotor.engrase !='S') && (RegMotor.engrase !='N'));
+			cout<<"\n\n Ingrese el Kilometraje Actual del Motor:  ";
+			cin.ignore();
+			getline(cin,RegMotor.kilometraje_actual);
+			cout<<"\n Ingrese el Kilometraje Proximo Cambio de Aceite:  ";
+			cin.ignore();
+			getline(cin,RegMotor.kilometraje_proximo_cambio);
+			cout<<"\n Ingrese la Fecha del Cambio de Aceite:  ";
+			cin.ignore();
+			getline(cin,RegMotor.fecha_cambio_aceite);
+
+			fseek(alias,ftell(alias)-sizeof(RegMotor),SEEK_SET); 
+			fwrite(&RegMotor,sizeof(RegMotor),1,alias);   
+			fclose(alias);
+
+			cout<<"\n          ----------------------------------------------------  ";
+			cout<<"\n          MODIFICACION DEL REGISTRO DEMANTENIMIENTO COMPLETADO  ";
+			cout<<"\n             <<< Digite cualquier tecla para continuar >>>      ";
+			getch(); 
+			return; 
+		}
+		fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	} 
+	cout << "\n\Error no Existe el Registro !!!"; 
+	fclose(alias); 
+
+	cout<<"\n       <<< Digite cualquier tecla para continuar >>>      "; 
+	getch(); 
+	return; 
+} 
+
+void CONSULTA_MOTOR(void) 
+{ 
+	int id_Consulta; 
+	cout<<"\n                   --------------------------------------                   "; 
+	cout<<"\n                    CONSULTA DEL MANTENIMIENTO DEL MOTOR                    ";
+	cout<<"\n                   --------------------------------------                   ";
+
+	alias=fopen("MOTOR.SEC","rb");  
+	if(alias==NULL) 
+	{ 
+		cout<<"\n\n        Error No Existe el Archivo !!!      ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+	cout<<"\nDigite id Registro q Decea Consultar:  ";
+	cin>>id_Consulta;
+
+	fread(&RegMotor,sizeof(RegMotor),1,alias);    
+	while(!feof(alias))  
+	{ 
+		if(RegMotor.Nro_RegMotor==id_Consulta) 
+		{ 
+			cout<<"\n\n       -----------------------------------------------------------------                 ";
+			cout<<"\n          DETALLE DE LA CONSULTA DEL REGISTRO DEL MANTENIMIENTO DEL MOTOR                  ";
+			cout<<"\n         -----------------------------------------------------------------                 ";
+			cout<<"\n\n-------------------------------------------------------------------------------";
+			cout<<"\n Registro id Motor   Marca de Aceite   Numero de Aceite   Litros de Aceite ";
+			cout<<"\n------------------   ---------------   ----------------   ---------------- ";
+			cout<<"\n\t"<<RegMotor.Nro_RegMotor<<"\t\t"<<RegMotor.marca_aceite<<"\t         "<<RegMotor.numero_aceite<<"\t\t "<<RegMotor.litros_aceite; 
+			cout<<"\n Filtro de Aceite   Filtro de Aire   Filtro de Gasolina   Filtro de Diesel ";
+			cout<<"\n-----------------   --------------   ------------------   ---------------- ";
+			cout<<"\n "<<RegMotor.filtro_aceite<<"\t\t   "<<RegMotor.filtro_aire<<"\t\t   "<<RegMotor.filtro_gasolina<<"\t\t\t  "<<RegMotor.filtro_diesel;
+			cout<<"\n engrase   Kilometraje Actual   Kilometraje ProxCambio   Fecha Cambio Aceite ";
+			cout<<"\n--------   ------------------   ----------------------   ------------------- ";
+			cout<<"\n    "<<RegMotor.engrase<<"\t     "<<RegMotor.kilometraje_actual<<"\t\t   "<<RegMotor.kilometraje_proximo_cambio<<"\t\t   "<<RegMotor.fecha_cambio_aceite;
+
+			fclose(alias); 
+			cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+			getch(); 
+			return; 
+		} 
+		fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	} 
+	cout << "\n\Error no Existe el Registro !!!"; 
+	fclose(alias);
+
+	cout<<"\n             --------------------------------------------- ";
+	cout<<"\n\t               CONSULTA DEL MANTENIMIENTO COMPLETADO     ";
+	cout<<"\n\t           <<< Digite cualquier tecla para continuar >>> ";
+	getch(); 
+	return; 
+}
+
+
+void BORRADO_BAJA_LOGICA_MOTOR(void) 
+{ 
+	int id_Borrado; 
+	char op;
+
+	cout<<"\n                   -------------------------------------                    "; 
+	cout<<"\n                    BORRADO DEL MANTENIMIENTO DEL MOTOR                     ";
+	cout<<"\n                   -------------------------------------                    ";
+
+	alias=fopen("MOTOR.SEC","rb+");  
+	if(alias==NULL)   
+	{ 
+		cout<<"\n\n        Error No Existe el Archivo !!!      ";
+		cout<<"\n <<< Digite cualquier tecla para continuar >>>";
+		getch(); 
+		return; 
+	}
+
+	cout<<"\nDigite id Registro q Decea Borrar:  "; 
+	cin >>id_Borrado;
+
+	fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	while(!feof(alias))  
+	{ 
+		if(RegMotor.Nro_RegMotor==id_Borrado) 
+		{ 
+			cout<<"\n\n       --------------------------------------------------------------                ";
+			cout<<"\n          DETALLE DEL BORRADO DEL REGISTRO DEL MANTENIMIENTO DEL MOTOR                 ";
+			cout<<"\n         --------------------------------------------------------------                ";
+			cout<<"\n\n-------------------------------------------------------------------------------";
+			cout<<"\n Registro id Motor   Marca de Aceite   Numero de Aceite   Litros de Aceite ";
+			cout<<"\n------------------   ---------------   ----------------   ---------------- ";
+			cout<<"\n\t"<<RegMotor.Nro_RegMotor<<"\t\t"<<RegMotor.marca_aceite<<"\t         "<<RegMotor.numero_aceite<<"\t\t "<<RegMotor.litros_aceite; 
+			cout<<"\n Filtro de Aceite   Filtro de Aire   Filtro de Gasolina   Filtro de Diesel ";
+			cout<<"\n-----------------   --------------   ------------------   ---------------- ";
+			cout<<"\n "<<RegMotor.filtro_aceite<<"\t\t   "<<RegMotor.filtro_aire<<"\t\t   "<<RegMotor.filtro_gasolina<<"\t\t\t  "<<RegMotor.filtro_diesel;
+			cout<<"\n engrase   Kilometraje Actual   Kilometraje ProxCambio   Fecha Cambio Aceite ";
+			cout<<"\n--------   ------------------   ----------------------   ------------------- ";
+			cout<<"\n    "<<RegMotor.engrase<<"\t     "<<RegMotor.kilometraje_actual<<"\t\t   "<<RegMotor.kilometraje_proximo_cambio<<"\t\t   "<<RegMotor.fecha_cambio_aceite;
+
+
+			RegMotor.Nro_RegMotor=0; 
+			RegMotor.marca_aceite="";
+			RegMotor.numero_aceite="";
+			RegMotor.litros_aceite="";
+			RegMotor.filtro_aceite=""; 
+			RegMotor.filtro_aire=' ';
+			RegMotor.filtro_gasolina=' ';
+			RegMotor.filtro_diesel=' ';
+			RegMotor.engrase=' ';
+			RegMotor.kilometraje_actual="";
+			RegMotor.kilometraje_proximo_cambio=""; 
+			RegMotor.fecha_cambio_aceite=""; 
+
+			do 
+			{ 
+				cout << "\n\n\Esta seguro que desea borrarlo? [S/N] ---> "; 
+				op=toupper(getche()); 
+			}while((op !='S') && (op !='N'));
+
+			if(op=='S') 
+			{ 
+				fseek(alias,ftell(alias)-sizeof(RegMotor),SEEK_SET);      
+				fwrite(&RegMotor,sizeof(RegMotor),1,alias);                                     
+				cout << "\n\n\n\rRegistro Eliminado !!!"; 
+			} 
+			fclose(alias);   
+			cout << "\n\r<<< Oprima cualquier tecla para continuar >>>"; 
+			getch(); 
+			return; 
+		} 
+		fread(&RegMotor,sizeof(RegMotor),1,alias); 
+	} 
+	cout << "\n\Error no Existe el Registro !!!";  
+	fclose(alias);
+
+	cout<<"\n             --------------------------------------------------  ";
+	cout<<"\n              BORRADO DEL REGISTRO DE MANTENIMIENTO COMPLETADO   ";
+	cout<<"\n               <<< Digite cualquier tecla para continuar >>>     ";
+	getch(); 
+	return; 
+}
+
